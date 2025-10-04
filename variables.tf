@@ -42,3 +42,10 @@ variable "function_name" {
 variable "image_uri" {
   description = "Lambda image URI"
 }
+
+variable "github_token" {
+  type      = string
+  sensitive = true
+  description = "GitHub PAT for Amplify connection"
+  default     = ""
+}
