@@ -19,3 +19,13 @@ variable "region" {
 variable "aws_account_id" {
   type        = string
 }
+
+variable "cognito_app_client_id" {
+  description = "cognito app client id"
+  type        = string
+}
+
+variable "cognito_user_pool_id" {
+  description = "cognito app pool id"
+  type        = string
+}

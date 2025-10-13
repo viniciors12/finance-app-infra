@@ -20,10 +20,24 @@ resource "aws_apigatewayv2_integration" "lambda" {
   payload_format_version = "2.0"
 }
 
+// cognito authorizer 
+resource "aws_apigatewayv2_authorizer" "cognito_auth" {
+  name                       = "finance-app-authorizer"
+  api_id                     = aws_apigatewayv2_api.this.id
+  authorizer_type            = "JWT"
+  identity_sources           = ["$request.header.Authorization"]
+  jwt_configuration {
+    audience = [var.cognito_app_client_id]
+    issuer   = "https://cognito-idp.${var.region}.amazonaws.com/${var.cognito_user_pool_id}"
+  }
+}
+
 # GET /transactions
 resource "aws_apigatewayv2_route" "transactions" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = "GET /transactions"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito_auth.id
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 
@@ -31,6 +45,8 @@ resource "aws_apigatewayv2_route" "transactions" {
 resource "aws_apigatewayv2_route" "post_transactions" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = "POST /transactions"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito_auth.id
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 
@@ -38,6 +54,8 @@ resource "aws_apigatewayv2_route" "post_transactions" {
 resource "aws_apigatewayv2_route" "get_transaction" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = "GET /transactions/{transactionId}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito_auth.id
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 
@@ -45,6 +63,8 @@ resource "aws_apigatewayv2_route" "get_transaction" {
 resource "aws_apigatewayv2_route" "delete_transaction" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = "DELETE /transactions/{transactionId}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito_auth.id
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 
@@ -52,6 +72,8 @@ resource "aws_apigatewayv2_route" "delete_transaction" {
 resource "aws_apigatewayv2_route" "filtered_transactions" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = "POST /transactions/filteredTransactions"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito_auth.id
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 
