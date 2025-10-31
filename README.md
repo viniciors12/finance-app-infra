@@ -1,1 +1,1 @@
-<img width="2460" height="2280" alt="Finance-App-Infra" src="https://github.com/user-attachments/assets/0d5147e2-aca2-41df-93ea-d4c8f33ed001" />
+<img width="2125" height="2203" alt="finance-app-diagram" src="https://github.com/user-attachments/assets/c74da6c6-6fb3-408b-a6d8-ba3397d4b5a3" />
